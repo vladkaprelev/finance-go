@@ -9,5 +9,6 @@
       "name": "finance_db",
       "username": "finance_user"
     }
-  ]
+  ],
+  "makefile.configureOnOpen": false
 }
