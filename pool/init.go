@@ -1,14 +1,16 @@
-package db
+package pool
 
 import (
 	"context"
+	"log"
+
 	"fmt"
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func NewPool(ctx context.Context) (*pgxpool.Pool, error) {
+func newPool(ctx context.Context) (*pgxpool.Pool, error) {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_POTR")
 	dbUser := os.Getenv("DB_USER")
@@ -34,4 +36,15 @@ func NewPool(ctx context.Context) (*pgxpool.Pool, error) {
 	}
 
 	return pool, nil
+}
+
+func InitPool(ctx context.Context) {
+
+	pool, err := newPool(ctx)
+	if err != nil {
+		log.Fatalf("Ошибка при инициализации базы: %v", err)
+	}
+	defer pool.Close()
+
+	log.Println("Подключение к базе PostgreSQL установлено!")
 }
