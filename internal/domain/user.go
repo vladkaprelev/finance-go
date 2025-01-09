@@ -69,6 +69,7 @@ func NewUser(name, email, password string) (*User, error) {
 	user := &User{
 		Name:      name,
 		Email:     email,
+		Password:  password,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

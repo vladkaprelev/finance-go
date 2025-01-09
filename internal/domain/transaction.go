@@ -7,11 +7,11 @@ import (
 )
 
 type Transaction struct {
-	ID         uint `gorm:"primaryKey;autoIncrement"`
-	UserID     uint
-	CategotyID uint
-	Value      int32
-	Date       time.Time
+	ID         uint      `gorm:"primaryKey;autoIncrement"`
+	UserID     uint      `gorm:"index;not null"`
+	Amount     float64   `gorm:"not null"`
+	CategoryID uint      `gorm:"index;not null"`
+	Date       time.Time `gorm:"not null"`
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
@@ -19,7 +19,7 @@ type Transaction struct {
 func NewTransaction(
 	categoryId uint,
 	userId uint,
-	value int32,
+	amount float64,
 	date time.Time,
 ) (*Transaction, error) {
 
@@ -31,14 +31,19 @@ func NewTransaction(
 		return nil, errs.NewValidationError("ID категории должен быть положительным числом")
 	}
 
-	if value < 0 {
-		return nil, errs.NewValidationError("значение value не может быть отрицательным")
+	if amount <= 0 {
+		return nil, errs.NewValidationError("сумма транзакции должна быть положительным числом")
+	}
+
+	if date.IsZero() {
+		return nil, errs.NewValidationError("дата транзакции не может быть пустой")
 	}
 
 	return &Transaction{
-		CategotyID: categoryId,
+		CategoryID: categoryId,
 		UserID:     userId,
 		Date:       date,
+		Amount:     amount,
 		CreatedAt:  time.Now(),
 		UpdatedAt:  time.Now(),
 	}, nil
