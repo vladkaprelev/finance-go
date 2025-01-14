@@ -8,6 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// User — структура, представляющая пользователя.
 type User struct {
 	ID        uint `gorm:"primaryKey;autoIncrement"`
 	Name      string
@@ -17,22 +18,25 @@ type User struct {
 	UpdatedAt time.Time
 }
 
-// Регулярное выражение для проверки email
-var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
-
 // Регулярное выражение для проверки наличия хотя бы одной буквы
 var letterRegex = regexp.MustCompile(`[A-Za-z]`)
+
+// Регулярное выражение для проверки email
+var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 
 // Регулярное выражение для проверки наличия хотя бы одной цифры
 var digitRegex = regexp.MustCompile(`\d`)
 
+// ValidateEmail — метод для проверки корректности формата email.
 func (u *User) ValidateEmail() error {
 	if !emailRegex.MatchString(u.Email) {
 		return errs.NewValidationError("некорректный формат email")
 	}
+
 	return nil
 }
 
+// ValidatePassword — метод для проверки корректности пароля (длина, наличие буквы и цифры).
 func (u *User) ValidatePassword() error {
 	// Проверка длины пароля
 	if len(u.Password) < 8 {
@@ -52,8 +56,8 @@ func (u *User) ValidatePassword() error {
 	return nil
 }
 
+// NewUser — функция для создания нового пользователя (с валидацией и хешированием пароля).
 func NewUser(name, email, password string) (*User, error) {
-
 	if name == "" {
 		return nil, errs.NewValidationError("имя пользователя не может быть пустым")
 	}
@@ -88,6 +92,7 @@ func NewUser(name, email, password string) (*User, error) {
 	if err != nil {
 		return nil, errs.NewValidationError("не удалось захешировать пароль")
 	}
+
 	user.Password = string(hashedPassword)
 
 	return user, nil

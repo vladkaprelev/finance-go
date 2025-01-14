@@ -1,0 +1,96 @@
+linters-settings:
+  errcheck:
+    exclude: .errcheck
+    check-type-assertions: true
+    check-blank: false
+  stylecheck:
+    min-confidence: 1
+    checks:
+      - -ST1003
+  gocyclo:
+    min-complexity: 16
+  cyclop:
+    max-complexity: 16
+  dupl:
+    # tokens count to trigger issue
+    threshold: 150
+  goconst:
+    # minimal length of string constant, 3 by default
+    min-len: 3
+    # minimal occurrences count to trigger, 3 by default
+    min-occurrences: 3
+  prealloc:
+    simple: true
+    range-loops: true
+    for-loops: false
+  funlen:
+    lines: 115
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - lll
+        - dupl
+        - funlen
+        - gocritic
+        - containedctx
+        - maintidx
+        - goerr113
+    - path: e2e/
+      linters:
+        - lll
+        - gomnd
+        - funlen
+        - revive
+        - stylecheck
+        - dupl
+        - maintidx
+    - path: dataloaders/
+      linters:
+        - dupl
+    - path: resolver/
+      linters:
+        - dupl
+run:
+  timeout: 5m
+  modules-download-mode: readonly
+  skip-dirs:
+    - ./e2e/internal/cases/...
+    - out
+
+linters:
+  enable-all: true
+  disable:
+    # deprecated
+    - scopelint
+    - varcheck
+    - golint
+    - ifshort
+    - interfacer
+    - maligned
+    - deadcode
+    - exhaustivestruct
+    - structcheck
+    - rowserrcheck
+    - sqlclosecheck
+    - structcheck
+    - wastedassign
+    - goimports
+    - gci
+    - promlinter
+    - varnamelen
+    - gofumpt
+    - godot
+    - nolintlint
+    - testpackage
+    - ireturn
+    - wrapcheck
+    - exhaustruct
+    - nosnakecase
+    - gocognit
+    - depguard
+    - revive
+    - stylecheck
+    # TODO: turn on after release
+    - gomnd
