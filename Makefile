@@ -9,3 +9,7 @@ dev:
 .PHONY: tests
 tests:
 	go test ./internal/domain -v
+
+.PHONY: lint
+lint:
+	golangci-lint run --fast

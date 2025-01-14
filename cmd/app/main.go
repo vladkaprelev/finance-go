@@ -29,7 +29,9 @@ func main() {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello World 5!"))
 	})
+
 	err = http.ListenAndServe(":3000", r)
+
 	if err != nil {
 		log.Println(err.Error())
 	}
