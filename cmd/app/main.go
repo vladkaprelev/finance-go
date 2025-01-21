@@ -13,13 +13,17 @@ import (
 	"github.com/vladkaprelev/finance-go/pool"
 )
 
+const (
+	TimeOutDuration = 5
+)
+
 func main() {
 	err := godotenv.Load() // пытается загрузить .env из корня проекта
 	if err != nil {
 		log.Println("No .env file found or error reading .env file")
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), TimeOutDuration*time.Second)
 	defer cancel()
 
 	pool.InitPool(ctx)

@@ -1,4 +1,4 @@
-package domain
+package model
 
 import (
 	"time"
@@ -13,6 +13,7 @@ type Transaction struct {
 	UserID     uint      `gorm:"index;not null"`           // Идентификатор пользователя, которому принадлежит транзакция
 	Amount     float64   `gorm:"not null"`                 // Сумма транзакции (должна быть положительным числом)
 	CategoryID uint      `gorm:"index;not null"`           // Идентификатор категории транзакции
+	BudgetID   uint      `gorm:"index;not null"`           // Идентификатор категории транзакции
 	Date       time.Time `gorm:"not null"`                 // Дата проведения транзакции
 	CreatedAt  time.Time // Время создания записи транзакции
 	UpdatedAt  time.Time // Время последнего обновления записи транзакции
@@ -24,13 +25,17 @@ type Transaction struct {
 // - сумма транзакции должна быть положительной,
 // - дата транзакции не может быть пустой.
 // В случае некорректных данных возвращается ошибка валидации.
-func NewTransaction(categoryID uint, userID uint, amount float64, date time.Time) (*Transaction, error) {
+func NewTransaction(categoryID uint, userID uint, budgetID uint, amount float64, date time.Time) (*Transaction, error) {
 	if userID == 0 {
 		return nil, errs.NewValidationError("ID пользователя должен быть положительным числом")
 	}
 
 	if categoryID == 0 {
 		return nil, errs.NewValidationError("ID категории должен быть положительным числом")
+	}
+
+	if budgetID == 0 {
+		return nil, errs.NewValidationError("ID бюджета должен быть положительным числом")
 	}
 
 	if amount <= 0 {
@@ -44,6 +49,7 @@ func NewTransaction(categoryID uint, userID uint, amount float64, date time.Time
 	return &Transaction{
 		CategoryID: categoryID,
 		UserID:     userID,
+		BudgetID:   budgetID,
 		Date:       date,
 		Amount:     amount,
 		CreatedAt:  time.Now(),

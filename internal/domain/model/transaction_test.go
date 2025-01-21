@@ -1,5 +1,5 @@
 // internal/domain/transaction_test.go
-package domain
+package model
 
 import (
 	"errors"
@@ -16,6 +16,7 @@ func TestNewTransaction(t *testing.T) {
 		name        string
 		userID      uint
 		categoryID  uint
+		budgetID    uint
 		amount      float64
 		date        time.Time
 		expectError bool
@@ -25,6 +26,7 @@ func TestNewTransaction(t *testing.T) {
 			name:        "ValidTransaction",
 			userID:      1,
 			categoryID:  2,
+			budgetID:    2,
 			amount:      100.50,
 			date:        time.Now(),
 			expectError: false,
@@ -33,6 +35,7 @@ func TestNewTransaction(t *testing.T) {
 			name:        "ZeroUserID",
 			userID:      0,
 			categoryID:  2,
+			budgetID:    2,
 			amount:      100.50,
 			date:        time.Now(),
 			expectError: true,
@@ -42,15 +45,27 @@ func TestNewTransaction(t *testing.T) {
 			name:        "ZeroCategoryID",
 			userID:      1,
 			categoryID:  0,
+			budgetID:    1,
 			amount:      100.50,
 			date:        time.Now(),
 			expectError: true,
 			errorMsg:    "ID категории должен быть положительным числом",
 		},
 		{
+			name:        "ZeroBudgetID",
+			userID:      1,
+			categoryID:  1,
+			budgetID:    0,
+			amount:      100.50,
+			date:        time.Now(),
+			expectError: true,
+			errorMsg:    "ID бюджета должен быть положительным числом",
+		},
+		{
 			name:        "NegativeAmount",
 			userID:      1,
 			categoryID:  2,
+			budgetID:    1,
 			amount:      -50.00,
 			date:        time.Now(),
 			expectError: true,
@@ -60,6 +75,7 @@ func TestNewTransaction(t *testing.T) {
 			name:        "ZeroDate",
 			userID:      1,
 			categoryID:  2,
+			budgetID:    1,
 			amount:      100.50,
 			date:        time.Time{},
 			expectError: true,
@@ -69,7 +85,7 @@ func TestNewTransaction(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			transaction, err := NewTransaction(tt.categoryID, tt.userID, tt.amount, tt.date)
+			transaction, err := NewTransaction(tt.categoryID, tt.userID, tt.budgetID, tt.amount, tt.date)
 
 			if tt.expectError {
 				assert.Nil(t, transaction, "Expected transaction to be nil on error")
@@ -87,6 +103,7 @@ func TestNewTransaction(t *testing.T) {
 
 				assert.Equal(t, tt.userID, transaction.UserID, "UserID does not match")
 				assert.Equal(t, tt.categoryID, transaction.CategoryID, "CategoryID does not match")
+				assert.Equal(t, tt.budgetID, transaction.BudgetID, "BudgetID does not match")
 				assert.Equal(t, tt.amount, transaction.Amount, "Amount does not match")
 				assert.Equal(t, tt.date, transaction.Date, "Date does not match")
 
