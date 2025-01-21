@@ -47,6 +47,7 @@ func InitPool(ctx context.Context) {
 	if err != nil {
 		log.Fatalf("Ошибка при инициализации базы: %v", err)
 	}
+
 	defer pool.Close()
 	log.Println("Подключение к базе PostgreSQL установлено!")
 }

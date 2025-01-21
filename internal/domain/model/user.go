@@ -1,4 +1,4 @@
-package domain
+package model
 
 import (
 	"regexp"
@@ -6,6 +6,10 @@ import (
 
 	"github.com/vladkaprelev/finance-go/internal/errs"
 	"golang.org/x/crypto/bcrypt"
+)
+
+const (
+	MinPasswordLength = 8
 )
 
 // User — структура, представляющая пользователя.
@@ -39,7 +43,7 @@ func (u *User) ValidateEmail() error {
 // ValidatePassword — метод для проверки корректности пароля (длина, наличие буквы и цифры).
 func (u *User) ValidatePassword() error {
 	// Проверка длины пароля
-	if len(u.Password) < 8 {
+	if len(u.Password) < MinPasswordLength {
 		return errs.NewValidationError("пароль должен содержать минимум 8 символов")
 	}
 
