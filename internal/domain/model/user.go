@@ -15,7 +15,6 @@ const (
 // User — структура, представляющая пользователя.
 type User struct {
 	ID        uint `gorm:"primaryKey;autoIncrement"`
-	Name      string
 	Email     string
 	Password  string
 	CreatedAt time.Time
@@ -61,11 +60,7 @@ func (u *User) ValidatePassword() error {
 }
 
 // NewUser — функция для создания нового пользователя (с валидацией и хешированием пароля).
-func NewUser(name, email, password string) (*User, error) {
-	if name == "" {
-		return nil, errs.NewValidationError("имя пользователя не может быть пустым")
-	}
-
+func NewUser(email, password string) (*User, error) {
 	if email == "" {
 		return nil, errs.NewValidationError("email не может быть пустым")
 	}
@@ -75,7 +70,6 @@ func NewUser(name, email, password string) (*User, error) {
 	}
 
 	user := &User{
-		Name:      name,
 		Email:     email,
 		Password:  password,
 		CreatedAt: time.Now(),

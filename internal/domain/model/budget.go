@@ -10,20 +10,21 @@ import (
 // Он содержит идентификаторы категории и пользователя, даты начала и окончания,
 // а также временные метки создания и обновления записи.
 type Budget struct {
-	ID         uint `gorm:"primaryKey;autoIncrement"`
-	CategotyID uint
-	UserID     uint
-
-	StartDate time.Time
-	EndDate   time.Time
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID          uint `gorm:"primaryKey;autoIncrement"`
+	CategoryID  uint
+	UserID      uint
+	TargetValue int32
+	StartDate   time.Time
+	EndDate     time.Time
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 // NewBudget конструктор создания budget
 func NewBudget(
 	categoryID uint,
 	userID uint,
+	targetValue int32,
 	startDate time.Time,
 	endDate time.Time,
 ) (*Budget, error) {
@@ -40,11 +41,12 @@ func NewBudget(
 	}
 
 	return &Budget{
-		CategotyID: categoryID,
-		UserID:     userID,
-		StartDate:  startDate,
-		EndDate:    endDate,
-		CreatedAt:  time.Now(),
-		UpdatedAt:  time.Now(),
+		CategoryID:  categoryID,
+		UserID:      userID,
+		TargetValue: targetValue,
+		StartDate:   startDate,
+		EndDate:     endDate,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}, nil
 }

@@ -7,8 +7,8 @@ import (
 )
 
 type IBudgetRepository interface {
-	Create(budget *model.Budget) error
-	Update(budget *model.Budget) error
+	Create(budget *model.Budget) (*model.Budget, error)
+	Update(budget *model.Budget) (*model.Budget, error)
 	Delete(id uint) error
 
 	FindByID(id uint) (*model.Budget, error)
